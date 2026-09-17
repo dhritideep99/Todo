@@ -1,0 +1,6 @@
+{
+  "name": "To-Do List",
+  "description": "A modern, responsive To-Do List app with local storage, task filters, editing, and dark mode.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

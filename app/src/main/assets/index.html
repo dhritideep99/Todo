@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="header-brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="app-title">To-Do List</h1>
+            <p class="current-date" id="currentDate">Today</p>
+          </div>
+        </div>
+        <button id="themeToggle" class="icon-btn theme-toggle" aria-label="Toggle theme" title="Toggle Light / Dark mode">
+          <!-- Sun Icon (for dark mode to switch to light) -->
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon Icon (for light mode to switch to dark) -->
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Stats Summary Card -->
+      <div class="stats-card">
+        <div class="stats-info">
+          <div>
+            <span class="stats-label">Daily Progress</span>
+            <div class="stats-numbers">
+              <span id="remainingCount" class="remaining-highlight">0</span>
+              <span class="remaining-text">tasks remaining</span>
+            </div>
+          </div>
+          <div class="progress-badge">
+            <span id="progressPercent">0%</span>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Add Task Card -->
+      <section class="card add-task-card">
+        <form id="todoForm" class="add-task-form">
+          <div class="input-group">
+            <input 
+              type="text" 
+              id="taskInput" 
+              class="task-input" 
+              placeholder="What needs to be done? (Press Enter)" 
+              autocomplete="off" 
+              maxlength="150"
+              required
+            >
+          </div>
+          <div class="form-footer">
+            <div class="datetime-input-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <input type="datetime-local" id="taskDateTime" class="datetime-input" aria-label="Due Date & Time">
+            </div>
+            <button type="submit" id="addTaskBtn" class="btn btn-primary add-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Task</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Task Controls (Filters & Actions) -->
+      <section class="task-controls">
+        <div class="filter-tabs" role="tablist">
+          <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+            All <span class="tab-badge" id="countAll">0</span>
+          </button>
+          <button class="filter-tab" data-filter="active" role="tab" aria-selected="false">
+            Active <span class="tab-badge" id="countActive">0</span>
+          </button>
+          <button class="filter-tab" data-filter="completed" role="tab" aria-selected="false">
+            Completed <span class="tab-badge" id="countCompleted">0</span>
+          </button>
+        </div>
+        <button id="clearCompletedBtn" class="clear-btn" title="Clear all completed tasks">
+          Clear Completed
+        </button>
+      </section>
+
+      <!-- Task List Container -->
+      <section class="task-list-section">
+        <ul id="taskList" class="task-list">
+          <!-- Dynamically populated tasks -->
+        </ul>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h2 class="empty-title">No tasks found</h2>
+          <p class="empty-subtitle">Add a new task above or relax, you're all caught up!</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Edit Task</h2>
+          <button id="closeModalBtn" class="icon-btn close-modal-btn" aria-label="Close edit modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <form id="editForm" class="modal-form">
+          <div class="modal-body">
+            <label for="editTaskInput" class="modal-label">Task description</label>
+            <input type="text" id="editTaskInput" class="task-input modal-input" maxlength="150" required>
+
+            <label for="editDateTimeInput" class="modal-label">Date & Time</label>
+            <div class="datetime-input-wrapper modal-datetime-wrapper">
+              <input type="datetime-local" id="editDateTimeInput" class="datetime-input">
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
